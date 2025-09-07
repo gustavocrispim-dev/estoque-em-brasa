@@ -1,8 +1,12 @@
 // server.js
-
+const connectDB = require("./db");
 const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 3001;
+
+// conectar o banco
+
+connectDB();
 
 // Middleware
 app.use(express.json());
