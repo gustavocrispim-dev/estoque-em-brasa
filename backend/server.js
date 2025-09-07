@@ -1,6 +1,6 @@
-// server.js
 const connectDB = require("./db");
 const express = require("express");
+const insumoRoutes = require("./src/routes/insumoRoutes");
 const app = express();
 const PORT = process.env.PORT || 3001;
 
@@ -10,6 +10,7 @@ connectDB();
 
 // Middleware
 app.use(express.json());
+app.use("/api/insumos", insumoRoutes);
 
 // Rota de teste
 app.get("/", (req, res) => {

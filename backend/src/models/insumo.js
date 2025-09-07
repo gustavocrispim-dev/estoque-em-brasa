@@ -27,6 +27,6 @@ const insumoSchema = new mongoose.Schema({
   },
 });
 
-const insumo = mongoose.model("insumo", insumoSchema);
+const Insumo = mongoose.model("Insumo", insumoSchema);
 
-module.exports = insumo;
+module.exports = Insumo;
