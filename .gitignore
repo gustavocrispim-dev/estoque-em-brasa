@@ -12,5 +12,5 @@ npm-debug.log*
 .DS_Store
 .vscode
 
-# Ignora a pasta de build do React (produção)
-/frontend/build
+# Ignora a pasta de build do NextJS
+.next
