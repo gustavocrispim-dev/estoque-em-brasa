@@ -1,8 +1,16 @@
+# Ignora as pastas de dependências do Node.js em todos os subdiretórios
 **/node_modules
 
+# Arquivos de log do npm
 npm-debug.log*
 
+# Variáveis de ambiente
 .env
+.env.*.local
 
+# Ignora arquivos de sistema e de IDEs
 .DS_Store
 .vscode
+
+# Ignora a pasta de build do React (produção)
+/frontend/build
