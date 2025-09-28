@@ -1,74 +1,92 @@
 "use client";
 
-import React, { useState } from "react";
-import { addInsumo } from "@/services/api";
+import React, { useState, useEffect } from "react";
+import { getAllInsumos, deleteInsumo, updateInsumo } from "@/services/api";
+import Insumo from "@/types/insumo";
 
-const InsumoForm = () => {
-  const [nome, setNome] = useState("");
-  const [quantidade, setQuantidade] = useState("");
-  const [unidadeMedida, setUnidadeMedida] = useState("");
-  const [loading, setLoading] = useState(false);
+const InsumoList = () => {
+  const [insumos, setInsumos] = useState<Insumo[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-
+  const fetchInsumos = async () => {
     try {
-      await addInsumo({
-        nome,
-        quantidade: Number(quantidade),
-        unidadeMedida,
-      });
-      // Limpar o formulário após o sucesso
-      setNome("");
-      setQuantidade("");
-      setUnidadeMedida("");
-      alert("Insumo adicionado com sucesso!");
-    } catch (error) {
-      alert("Erro ao adicionar insumo.");
+      setLoading(true);
+      const data = await getAllInsumos();
+      setInsumos(data);
+    } catch (err) {
+      setError("Não foi possível carregar os insumos.");
     } finally {
       setLoading(false);
     }
   };
 
+  useEffect(() => {
+    fetchInsumos();
+  }, []);
+
+  const handleDelete = async (id: string) => {
+    if (window.confirm("Tem certeza que deseja deletar este insumo?")) {
+      try {
+        await deleteInsumo(id);
+        fetchInsumos(); // Atualiza a lista após a exclusão
+      } catch (error) {
+        setError("Erro ao deletar insumo.");
+      }
+    }
+  };
+
+  const handleUpdate = async (id: string, currentQuantidade: number) => {
+    const newQuantidade = window.prompt(
+      "Digite a nova quantidade:",
+      currentQuantidade.toString()
+    );
+    if (newQuantidade !== null && !isNaN(Number(newQuantidade))) {
+      try {
+        await updateInsumo(id, { quantidade: Number(newQuantidade) });
+        fetchInsumos(); // Atualiza a lista após a edição
+      } catch (error) {
+        setError("Erro ao atualizar insumo.");
+      }
+    }
+  };
+
+  if (loading) {
+    return <div>Carregando insumos...</div>;
+  }
+
+  if (error) {
+    return <div>Erro: {error}</div>;
+  }
+
   return (
-    <form
-      onSubmit={handleSubmit}
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: "10px",
-        maxWidth: "300px",
-        margin: "20px 0",
-      }}
-    >
-      <h2>Adicionar Insumo</h2>
-      <input
-        type="text"
-        placeholder="Nome do Insumo"
-        value={nome}
-        onChange={(e) => setNome(e.target.value)}
-        disabled={loading}
-      />
-      <input
-        type="number"
-        placeholder="Quantidade"
-        value={quantidade}
-        onChange={(e) => setQuantidade(e.target.value)}
-        disabled={loading}
-      />
-      <input
-        type="text"
-        placeholder="Unidade de Medida (ex: kg, un)"
-        value={unidadeMedida}
-        onChange={(e) => setUnidadeMedida(e.target.value)}
-        disabled={loading}
-      />
-      <button type="submit" disabled={loading}>
-        {loading ? "Adicionando..." : "Adicionar Insumo"}
-      </button>
-    </form>
+    <div>
+      <h2>Lista de Insumos</h2>
+      {insumos.length === 0 ? (
+        <p>Nenhum insumo encontrado. Adicione um novo insumo.</p>
+      ) : (
+        <ul>
+          {insumos.map((insumo) => (
+            <li key={insumo._id}>
+              {insumo.nome} - {insumo.quantidade} {insumo.unidadeMedida}
+              <button
+                onClick={() => handleUpdate(insumo._id, insumo.quantidade)}
+                style={{ marginLeft: "10px" }}
+              >
+                Editar
+              </button>
+              <button
+                onClick={() => handleDelete(insumo._id)}
+                style={{ marginLeft: "10px" }}
+              >
+                Deletar
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
   );
 };
 
-export default InsumoForm;
+export default InsumoList;
