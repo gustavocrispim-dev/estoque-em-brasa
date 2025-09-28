@@ -2,8 +2,6 @@
 
 > Um sistema simples e eficiente para gerenciamento de insumos, ideal para pequenos negócios no ramo alimentício.
 
-![Tela Principal do App](URL_DA_SUA_IMAGEM_AQUI)  ---
-
 ## 📋 Sobre o Projeto
 
 O "Estoque em Brasa" nasceu da necessidade de controlar de forma rápida e intuitiva o fluxo de entrada e saída de ingredientes. A aplicação permite que o usuário cadastre, visualize, edite e remova insumos do seu estoque, garantindo uma gestão precisa e evitando desperdícios.
