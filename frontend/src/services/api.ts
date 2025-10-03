@@ -2,7 +2,7 @@ import axios from "axios";
 import Insumo from "@/types/insumo";
 
 // Define a URL base da sua API
-const API_URL = "http://localhost:3001/api/insumos";
+const API_URL = "http://localhost:5000/api/insumos";
 
 // Função para buscar todos os insumos
 export const getAllInsumos = async (): Promise<Insumo[]> => {
