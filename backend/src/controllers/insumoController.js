@@ -16,17 +16,19 @@ const getInsumos = async (req, res) => {
 // @desc    Adicionar um novo insumo
 // @route   POST /api/insumos
 const addInsumo = async (req, res) => {
-  const { nome, quantidade, unidadeMedida } = req.body;
+  const { nome, quantidade, unidadeMedida, categoria } = req.body;
   const insumo = new Insumo({
     nome,
     quantidade,
     unidadeMedida,
+    categoria,
   });
 
   try {
     const newInsumo = await insumo.save();
     res.status(201).json(newInsumo);
   } catch (err) {
+    console.error("ERRO CAPTURADO NO CONTROLLER:", err);
     res.status(400).json({ message: err.message });
   }
 };
@@ -43,8 +45,9 @@ const updateInsumo = async (req, res) => {
 
     // Atualiza os campos que foram enviados no corpo da requisição
     insumo.nome = req.body.nome || insumo.nome;
-    insumo.quantidade = req.body.quantidade || insumo.quantidade;
+    insumo.quantidade = req.body.quantidade ?? insumo.quantidade;
     insumo.unidadeMedida = req.body.unidadeMedida || insumo.unidadeMedida;
+    insumo.categoria = req.body.categoria || insumo.categoria;
 
     const updatedInsumo = await insumo.save();
     res.json(updatedInsumo);
