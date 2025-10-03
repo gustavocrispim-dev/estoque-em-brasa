@@ -1,11 +1,22 @@
+// backend/src/routes/insumoRoutes.js
+
 const express = require("express");
 const router = express.Router();
-const { getInsumos, addInsumo } = require("../controllers/insumoController");
 
-// Rota para listar todos os insumos e para adicionar um novo insumo
+// Importa todas as funções do controller
+const {
+  getInsumos,
+  addInsumo,
+  updateInsumo,
+  deleteInsumo,
+} = require("../controllers/insumoController");
+
+// Rotas para a raiz /api/insumos
+// GET para buscar todos, POST para criar um novo
 router.route("/").get(getInsumos).post(addInsumo);
 
-// Futuramente, as rotas para um insumo específico (update/delete) virão aqui
-// Ex: router.route('/:id').put(updateInsumo).delete(deleteInsumo);
+// Rotas para um item específico via ID -> /api/insumos/:id
+// PUT para atualizar, DELETE para deletar
+router.route("/:id").put(updateInsumo).delete(deleteInsumo);
 
 module.exports = router;
